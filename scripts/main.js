@@ -2,13 +2,17 @@ var height = 20;
 var width = 80;
 var gameState;
 
+randomizeInitialState();
+draw();
+tick();
 
 
-// function to draw a grid in the canvas area
+// draw the state of the game in the canvas area
 
 function draw() {
-    randomizeInitialState();
-    var ctx = document.getElementById('board').getContext('2d');
+    var canvas = document.getElementById('board')
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (var i = 0; i < width; i++) {
         for (var j = 0; j < height; j++) {
             ctx.strokeRect(i * 10, j * 10, 10, 10);
@@ -24,10 +28,10 @@ function draw() {
 //  a dead cell
 
 function randomizeInitialState() {
-    gameState = new Array(20);
-    for (var i = 0; i < 80; i++) {
-        gameState[i] = new Array(80);
-        for (var j = 0; j < 20; j++) {
+    gameState = new Array(height);
+    for (var i = 0; i < width; i++) {
+        gameState[i] = new Array(width);
+        for (var j = 0; j < height; j++) {
             if (Math.round(Math.random()) ===1) {
                 gameState[i][j] = true;
             }
@@ -65,14 +69,30 @@ function getNeighbours(x, y) {
 
 function countAliveNeighbours(x, y) {
   var neighbours = getNeighbours(x, y);
-  var liveNeighbours = neighbours.filter(function(value){
+  var liveNeighbours = neighbours.filter(function(value) {
     return value === true;
   });
   return liveNeighbours.length;
 }
 
-function updateGameState() {
 
+function updateGameState() {
+  for (var i = 0; i < width; i++) {
+      for (var j = 0; j < height; j++) {
+          var liveNeighbours = countAliveNeighbours(i, j);
+          if (gameState[i][j] === true && liveNeighbours < 2) {
+            gameState[i][j] = undefined;
+          } else if (gameState[i][j] === true && liveNeighbours > 3) {
+            gameState[i][j] = undefined;
+          } else if (gameState[i][j] === undefined && liveNeighbours === 3) {
+            gameState[i][j] = true;
+          }
+      }
+  }
 }
 
-draw();
+function tick() {
+  updateGameState();
+  draw();
+  setTimeout(tick, 500);
+}
