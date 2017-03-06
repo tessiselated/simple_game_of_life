@@ -19,6 +19,9 @@ function draw() {
     }
 }
 
+// function to create a multi-dimensional array of same height and width of the grid
+//  where each entry is a boolean, true to indicate a live cell and false to indicate
+//  a dead cell
 
 function randomizeInitialState() {
     gameState = new Array(20);
@@ -32,6 +35,32 @@ function randomizeInitialState() {
             }
         }
     }
+}
+
+function checkBoundaries(x, y) {
+  try {
+    gameState[x][y] !== undefined;
+  } catch(e) {
+    return;
+  }
+  return gameState[x][y];
+}
+
+function getNeighbours(x, y) {
+  return [
+    checkBoundaries(x, y-1),
+    checkBoundaries(x + 1, y-1),
+    checkBoundaries(x + 1, y),
+    checkBoundaries(x+1, y+1),
+    checkBoundaries(x, y+1),
+    checkBoundaries(x -1, y+1),
+    checkBoundaries(x-1, y),
+    checkBoundaries(x-1, y-1)
+  ];
+}
+
+function updateGameState() {
+
 }
 
 draw();
