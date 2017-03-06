@@ -10,7 +10,7 @@ tick();
 // draw the state of the game in the canvas area
 
 function draw() {
-    var canvas = document.getElementById('board')
+    var canvas = document.getElementById('board');
     var ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (var i = 0; i < width; i++) {
