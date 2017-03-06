@@ -30,21 +30,23 @@ function randomizeInitialState() {
         for (var j = 0; j < 20; j++) {
             if (Math.round(Math.random()) ===1) {
                 gameState[i][j] = true;
-            } else {
-                gameState[i][j] = false;
             }
         }
     }
 }
 
+// Check that any neighbour being tested is within boundaries of grid
+
 function checkBoundaries(x, y) {
   try {
-    gameState[x][y] !== undefined;
+    gameState[x][y];
   } catch(e) {
     return;
   }
   return gameState[x][y];
 }
+
+// returns an array of true (alive) and undefined (dead or outside boundary) for the neighbours of the cell at a given location
 
 function getNeighbours(x, y) {
   return [
@@ -57,6 +59,16 @@ function getNeighbours(x, y) {
     checkBoundaries(x-1, y),
     checkBoundaries(x-1, y-1)
   ];
+}
+
+// count how many neighbouring cells are alive
+
+function countAliveNeighbours(x, y) {
+  var neighbours = getNeighbours(x, y);
+  var liveNeighbours = neighbours.filter(function(value){
+    return value === true;
+  });
+  return liveNeighbours.length;
 }
 
 function updateGameState() {
