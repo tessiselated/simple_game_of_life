@@ -77,22 +77,29 @@ function countAliveNeighbours(x, y) {
 
 
 function updateGameState() {
+  var holdingArray = new Array(height);
+  for (var h = 0; h < width; h++) {
+      holdingArray[h] = new Array(width);
+      }
   for (var i = 0; i < width; i++) {
       for (var j = 0; j < height; j++) {
           var liveNeighbours = countAliveNeighbours(i, j);
           if (gameState[i][j] === true && liveNeighbours < 2) {
-            gameState[i][j] = undefined;
+            holdingArray[i][j] = undefined;
           } else if (gameState[i][j] === true && liveNeighbours > 3) {
-            gameState[i][j] = undefined;
+            holdingArray[i][j] = undefined;
+          } else if (gameState[i][j] === true) {
+            holdingArray[i][j] = true;
           } else if (gameState[i][j] === undefined && liveNeighbours === 3) {
-            gameState[i][j] = true;
+            holdingArray[i][j] = true;
           }
       }
   }
+  return holdingArray;
 }
 
 function tick() {
-  updateGameState();
+  gameState = updateGameState();
   draw();
   setTimeout(tick, 500);
 }
